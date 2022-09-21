@@ -97,63 +97,108 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             if (currentMap.get(key).size() > newWords.size()) {
                 newWords = currentMap.get(key);
                 currentKey = key;
-            }
-            else if (currentMap.get(key).size() < newWords.size()) {
-
-            }
-            else {
+            } else if (currentMap.get(key).size() == newWords.size()) {
                 int keyCount = 0;
                 int currentKeyCount = 0;
-                int keyFirstLetter = -11;
-                int currentKeyFirstLetter = -11;
-                int keySecondLetter = -13;
-                int currentKeySecondLetter = -13;
+                int keyGuess = 0;
+                int currentKeyGuess = 0;
                 for (int i = 0; i < key.length(); i++) {
-                    if (key.charAt(i) != '-') {
+                    if (key.charAt(i) == '-') {
                         keyCount++;
-                        if (keyFirstLetter == -11) {
-                            keyFirstLetter = i;
-                        }
-                            keySecondLetter = i;
                     }
-                    if (currentKey.charAt(i) != '-') {
+                    if (key.charAt(i) == guess) {
+                        keyGuess++;
+                    }
+                    if (currentKey.charAt(i) == '-') {
                         currentKeyCount++;
-                        if (currentKeyFirstLetter == -11) {
-                            currentKeyFirstLetter = i;
-                        }
-                            currentKeySecondLetter = i;
                     }
-
                 }
-                if(keyCount < currentKeyCount) {
+                if (keyGuess == 0) {
                     newWords = currentMap.get(key);
                     currentKey = key;
                 }
-                else if (keyCount > currentKeyCount) {
+                else if (currentKeyGuess == 0) {
 
                 }
+                else if (keyCount < currentKeyCount) {
+                    newWords = currentMap.get(key);
+                    currentKey = key;
+                }
                 else {
-                    if (keyFirstLetter > currentKeyFirstLetter) {
-                        newWords = currentMap.get(key);
-                        currentKey = key;
-                    } else if (keyFirstLetter < currentKeyFirstLetter) {
-
-                    } else {
-                        if (keySecondLetter > currentKeySecondLetter) {
-                        newWords = currentMap.get(key);
-                        currentKey = key;
-                        }
-                        else if (keySecondLetter < currentKeySecondLetter) {
-
-                        }
-                        else {
+                    for (int i = key.length() - 1; i < key.length(); i--) {
+                        if (key.charAt(i) == guess && currentKey.charAt(i) != guess) {
                             newWords = currentMap.get(key);
                             currentKey = key;
+                            break;
+                        } else if (currentKey.charAt(i) == guess && key.charAt(i) != guess) {
+                            break;
                         }
                     }
                 }
             }
         }
+
+
+
+
+
+
+
+
+
+//            else {
+//                int keyCount = 0;
+//                int currentKeyCount = 0;
+//                int keyFirstLetter = -11;
+//                int currentKeyFirstLetter = -11;
+//                int keySecondLetter = -13;
+//                int currentKeySecondLetter = -13;
+//                for (int i = 0; i < key.length(); i++) {
+//                    if (key.charAt(i) != '-') {
+//                        keyCount++;
+//                        if (keyFirstLetter == -11) {
+//                            keyFirstLetter = i;
+//                        }
+//                            keySecondLetter = i;
+//                    }
+//                    if (currentKey.charAt(i) != '-') {
+//                        currentKeyCount++;
+//                        if (currentKeyFirstLetter == -11) {
+//                            currentKeyFirstLetter = i;
+//                        }
+//                            currentKeySecondLetter = i;
+//                    }
+//
+//                }
+//                if(keyCount < currentKeyCount) {
+//                    newWords = currentMap.get(key);
+//                    currentKey = key;
+//                }
+//                else if (keyCount > currentKeyCount) {
+//
+//                }
+//                else {
+//                    if (keyFirstLetter > currentKeyFirstLetter) {
+//                        newWords = currentMap.get(key);
+//                        currentKey = key;
+//                    } else if (keyFirstLetter < currentKeyFirstLetter) {
+//
+//                    } else {
+//                        if (keySecondLetter > currentKeySecondLetter) {
+//                        newWords = currentMap.get(key);
+//                        currentKey = key;
+//                        }
+//                        else if (keySecondLetter < currentKeySecondLetter) {
+//
+//                        }
+//                        else {
+//                            newWords = currentMap.get(key);
+//                            currentKey = key;
+//                        }
+//                    }
+//                }
+//            }
+//        }
         words = newWords;
         return words;
 
