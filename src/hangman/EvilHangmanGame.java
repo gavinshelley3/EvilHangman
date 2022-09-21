@@ -62,16 +62,16 @@ public class EvilHangmanGame implements IEvilHangmanGame {
                 }
                 else if (i == word.length() - 1) {
                     if (word.charAt(i) == guess) {
-                        key = key.substring(0, i) + guess + key.substring(i, word.length());
+                        key = key.substring(0, i) + guess + key.substring(i, word.length() - 1);
                     } else {
-                        key = key.substring(0, i) + "-" + key.substring(i, word.length());
+                        key = key.substring(0, i) + "-" + key.substring(i, word.length() - 1);
                     }
                 }
                 else {
                     if (word.charAt(i) == guess) {
-                        key = key.substring(0, i) + guess + key.substring(i + 1, word.length());
+                        key = key.substring(0, i) + guess + key.substring(i + 1, word.length() - 1);
                     } else {
-                        key = key.substring(0, i) + "-" + key.substring(i + 1, word.length());
+                        key = key.substring(0, i) + "-" + key.substring(i + 1, word.length() - 1);
                     }
                 }
             }
@@ -112,25 +112,31 @@ public class EvilHangmanGame implements IEvilHangmanGame {
                     if (currentKey.charAt(i) == '-') {
                         currentKeyCount++;
                     }
+                    if (currentKey.charAt(i) == guess) {
+                        currentKeyGuess++;
+                    }
                 }
-                if (keyGuess == 0) {
+                if (keyGuess == 0 && currentKeyGuess != 0) {
                     newWords = currentMap.get(key);
                     currentKey = key;
                 }
-                else if (currentKeyGuess == 0) {
+                else if (currentKeyGuess == 0 && keyGuess != 0) {
 
                 }
                 else if (keyCount < currentKeyCount) {
                     newWords = currentMap.get(key);
                     currentKey = key;
                 }
-                else {
-                    for (int i = key.length() - 1; i < key.length(); i--) {
-                        if (key.charAt(i) == guess && currentKey.charAt(i) != guess) {
+                else if (keyCount > currentKeyCount) {
+
+                }
+                else if (keyCount == currentKeyCount) {
+                    for (int i = key.length() - 1; i >= 0; i--) {
+                        if (key.charAt(i) != '-' && currentKey.charAt(i) == '-') {
                             newWords = currentMap.get(key);
                             currentKey = key;
                             break;
-                        } else if (currentKey.charAt(i) == guess && key.charAt(i) != guess) {
+                        } else if (currentKey.charAt(i) != '-' && key.charAt(i) == '-') {
                             break;
                         }
                     }
