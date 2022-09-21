@@ -109,36 +109,47 @@ public class EvilHangmanGame implements IEvilHangmanGame {
                 int keySecondLetter = -13;
                 int currentKeySecondLetter = -13;
                 for (int i = 0; i < key.length(); i++) {
-                    if (key.charAt(i) == guess) {
+                    if (key.charAt(i) != '-') {
                         keyCount++;
                         if (keyFirstLetter == -11) {
                             keyFirstLetter = i;
                         }
-                        else if (keySecondLetter == -13) {
                             keySecondLetter = i;
-                        }
                     }
-                    if (currentKey.charAt(i) == guess) {
+                    if (currentKey.charAt(i) != '-') {
                         currentKeyCount++;
                         if (currentKeyFirstLetter == -11) {
                             currentKeyFirstLetter = i;
                         }
-                        else if (currentKeySecondLetter == -13) {
                             currentKeySecondLetter = i;
-                        }
                     }
+
                 }
                 if(keyCount < currentKeyCount) {
                     newWords = currentMap.get(key);
                     currentKey = key;
                 }
-                else if (keyCount == currentKeyCount) {
+                else if (keyCount > currentKeyCount) {
+
+                }
+                else {
                     if (keyFirstLetter > currentKeyFirstLetter) {
                         newWords = currentMap.get(key);
                         currentKey = key;
-                    } else if (keySecondLetter > currentKeySecondLetter) {
+                    } else if (keyFirstLetter < currentKeyFirstLetter) {
+
+                    } else {
+                        if (keySecondLetter > currentKeySecondLetter) {
                         newWords = currentMap.get(key);
                         currentKey = key;
+                        }
+                        else if (keySecondLetter < currentKeySecondLetter) {
+
+                        }
+                        else {
+                            newWords = currentMap.get(key);
+                            currentKey = key;
+                        }
                     }
                 }
             }
