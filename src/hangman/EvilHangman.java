@@ -1,6 +1,7 @@
 package hangman;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Scanner;
@@ -9,15 +10,32 @@ import java.util.Set;
 public class EvilHangman {
 
     public static void main(String[] args) throws Exception {
-        if (args[0] == null || args[1] == null || args[2] == null) {
-            throw new Exception("Invalid arguments");
+        try {
+            if (args[0] == null || args[1] == null || args[2] == null) {
+                throw new Exception("Invalid arguments");
+            }
+            if (args[1].equals("0")) {
+                throw new Exception("Invalid arguments");
+            }
         }
-        else {
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
             File file = new File(args[0]);
             int wordLength = Integer.parseInt(args[1]);
             int guesses = Integer.parseInt(args[2]);
             EvilHangmanGame game = new EvilHangmanGame();
-            game.startGame(file, wordLength);
+            try {
+                game.startGame(file, wordLength);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch (EmptyDictionaryException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
             Scanner scanner = new Scanner(System.in);
             Set<Character> guessedLetters = new HashSet<Character>();
             while (guesses > 0) {
@@ -38,20 +56,27 @@ public class EvilHangman {
                         System.out.println("You already guessed that letter");
                     }
                     else {
-                        Set<String> words = game.makeGuess(letter);
+                        Set<String> words = new HashSet<>();
+                        try {
+                            words = game.makeGuess(letter);
+                        }
+                        catch (GuessAlreadyMadeException e) {
+                            System.out.println(e.getMessage());
+                        }
+                        if ((game.getWord().length() - game.getWord().replace(String.valueOf(letter), "").length()) == 0) {
+                            guesses--;
+                        }
                         System.out.println("Found " + (game.getWord().length() - game.getWord().replace(String.valueOf(letter), "").length()) + " " + letter + "'s");
                         if (words.size() == 1) {
                             System.out.println("You win!");
                             System.out.println("The word was: " + words.iterator().next());
                             break;
-                        }
-                        else {
+                        } else {
                             guessedLetters.add(letter);
-                            guesses--;
                         }
                     }
                 }
-            }
+
         }
     }
 
