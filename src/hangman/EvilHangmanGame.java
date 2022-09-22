@@ -77,7 +77,7 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             for (int i = 0; i < word.length(); i++) {
                 if (currentKey.charAt(i) != '-') {
                     if (i == currentKey.length() - 1) {
-                        key = key.substring(0, i) + currentKey.charAt(i)+ key.substring(i, word.length());
+                        key = key.substring(0, i) + currentKey.charAt(i);
                     }
                     else {
                         key = key.substring(0, i) + currentKey.charAt(i) + key.substring(i + 1, word.length());

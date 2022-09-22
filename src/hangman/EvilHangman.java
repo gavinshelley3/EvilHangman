@@ -67,7 +67,7 @@ public class EvilHangman {
                             guesses--;
                         }
                         System.out.println("Found " + (game.getWord().length() - game.getWord().replace(String.valueOf(letter), "").length()) + " " + letter + "'s");
-                        if (words.size() == 1) {
+                        if (words.size() == 1 && !game.getWord().contains("-")) {
                             System.out.println("You win!");
                             System.out.println("The word was: " + words.iterator().next());
                             break;
