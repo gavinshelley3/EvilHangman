@@ -71,7 +71,13 @@ public class EvilHangman {
                             System.out.println("You win!");
                             System.out.println("The word was: " + words.iterator().next());
                             break;
-                        } else {
+                        }
+                        else if (guesses == 0) {
+                            System.out.println("You lose!");
+                            System.out.println("The word was: " + words.iterator().next());
+                            break;
+                        }
+                        else {
                             guessedLetters.add(letter);
                         }
                     }
