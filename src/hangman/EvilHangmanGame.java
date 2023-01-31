@@ -1,58 +1,66 @@
 package hangman;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
 public class EvilHangmanGame implements IEvilHangmanGame {
-    private Set<String> words = new HashSet<String>();
+    private Set<String> words = new HashSet<>();
     private String currentKey = "";
-    private SortedSet<Character> guessedLetters = new TreeSet<Character>() {
-    };
-    private HashMap<String, Set<String>> map = new HashMap<String, Set<String>>();
+    private SortedSet<Character> guessedLetters = new TreeSet<>();
+
     @Override
     public void startGame(File dictionary, int wordLength) throws IOException, EmptyDictionaryException {
-            words.clear();
-            currentKey = "";
-            if (wordLength == 0) {
-                throw new EmptyDictionaryException("Invalid word length");
-            }
-            FileInputStream in = new FileInputStream(dictionary);
-            System.out.println("File found");
-            if (dictionary.length() > 0) {
-                Scanner scanner = new Scanner(dictionary);
-                while (scanner.hasNextLine()) {
-                    String word = scanner.nextLine().toLowerCase();
-                    if (word.length() == wordLength) {
-                        words.add(word);
-                    }
+        words.clear();
+        currentKey = "";
+
+
+        if (wordLength == 0) {
+            throw new EmptyDictionaryException("Invalid word length");
+        }
+
+        if (dictionary == null || !dictionary.exists() || dictionary.length() == 0) {
+            throw new EmptyDictionaryException("Empty Dictionary Exception");
+        }
+
+        if (dictionary.length() > 0) {
+            Scanner scanner = new Scanner(dictionary);
+            while (scanner.hasNextLine()) {
+                String word = scanner.nextLine().toLowerCase();
+                if (word.length() == wordLength) {
+                    words.add(word);
                 }
             }
-            if (words.isEmpty()) {
-                throw new EmptyDictionaryException("There are no words in your dictionary");
-            }
-            for (int i = 0; i < words.iterator().next().length(); i++) {
-                currentKey += "-";
-            }
+        }
 
+
+        if (words.isEmpty()) {
+            throw new EmptyDictionaryException("There are no words in your dictionary");
+        }
+
+
+        for (int i = 0; i < words.iterator().next().length(); i++) {
+            currentKey += "-";
+        }
     }
 
     @Override
     public Set<String> makeGuess(char guess) throws GuessAlreadyMadeException {
 
-        guess = Character.toLowerCase(guess);
-        Set<String> newWords = new HashSet<String>();
-        HashMap<String, Set<String>> currentMap = new HashMap<String, Set<String>>();
+        guess = getGuess(guess);
+        Set<String> newWords = new HashSet<>();
+        HashMap<String, Set<String>> currentMap = new HashMap<>();
+
+
         if (guessedLetters == null) {
-            guessedLetters = new TreeSet<Character>();
-        }
-        else if (guessedLetters.contains(guess)) {
+            guessedLetters = new TreeSet<>();
+        } else if (guessedLetters.contains(guess)) {
             throw new GuessAlreadyMadeException("You have already guessed this character\n");
         } else {
             guessedLetters.add(guess);
         }
+
+
         for (String word : words) {
             String key = currentKey;
             for (int i = 0; i < word.length(); i++) {
@@ -74,6 +82,8 @@ public class EvilHangmanGame implements IEvilHangmanGame {
                     }
                 }
             }
+
+
             for (int i = 0; i < word.length(); i++) {
                 if (currentKey.charAt(i) != '-') {
                     if (i == currentKey.length() - 1) {
@@ -84,14 +94,18 @@ public class EvilHangmanGame implements IEvilHangmanGame {
                     }
                 }
             }
+
+
             if (currentMap.containsKey(key)) {
                 currentMap.get(key).add(word);
             } else {
-                Set<String> newSet = new HashSet<String>();
+                Set<String> newSet = new HashSet<>();
                 newSet.add(word);
                 currentMap.put(key, newSet);
             }
         }
+
+
         for (String key : currentMap.keySet()) {
             for (int i = 0; i < key.length(); i++) {
                 if (currentMap.get(key).size() > newWords.size()) {
@@ -106,9 +120,14 @@ public class EvilHangmanGame implements IEvilHangmanGame {
                 }
             }
         }
+
+
         words = newWords;
         return words;
+    }
 
+    private static char getGuess(char guess) {
+        return Character.toLowerCase(guess);
     }
 
     @Override
